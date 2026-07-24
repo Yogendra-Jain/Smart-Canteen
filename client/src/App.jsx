@@ -1,9 +1,9 @@
-import React from 'react';
-
 function App() {
   return (
-    <div className="app">
-      <h1>Smart Canteen</h1>
+    <div className="min-h-screen flex items-center justify-center bg-slate-900">
+      <h1 className="text-5xl font-bold text-green-500">
+        Smart Canteen Management System
+      </h1>
     </div>
   );
 }
