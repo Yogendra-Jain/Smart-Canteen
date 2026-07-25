@@ -2,12 +2,14 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import connectDB from "./config/db.js";
 
-// Load environment variables
 dotenv.config();
 
-// Create Express app
 const app = express();
+
+// Connect Database
+connectDB();
 
 // Middlewares
 app.use(cors());
@@ -22,10 +24,8 @@ app.get("/", (req, res) => {
   });
 });
 
-// PORT
 const PORT = process.env.PORT || 5000;
 
-// Start Server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server running on Port ${PORT}`);
 });
