@@ -69,13 +69,107 @@ export const registerUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-  res.json({ message: 'Login User route placeholder' });
+    try {
+
+        // Step 1: Get email and password
+        const { email, password } = req.body;
+
+        // Step 2: Validate input
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide email and password."
+            });
+        }
+
+        // Step 3: Find user
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password."
+            });
+        }
+
+        // Step 4: Compare password
+        const isPasswordCorrect = await bcrypt.compare(
+            password,
+            user.password
+        );
+
+        if (!isPasswordCorrect) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password."
+            });
+        }
+
+        // Step 5: Generate token
+        const token = generateToken(user._id);
+
+        // Step 6: Send response
+        res.status(200).json({
+            success: true,
+            message: "Login successful.",
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                role: user.role,
+            },
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+
+    }
 };
 
 export const logoutUser = async (req, res) => {
-  res.json({ message: 'Logout User route placeholder' });
+
+    res.status(200).json({
+
+        success: true,
+
+        message: "Logout Successful"
+
+    });
+
 };
 
+
+
 export const getUserProfile = async (req, res) => {
-  res.json({ message: 'Get User Profile route placeholder' });
+
+    res.status(200).json({
+
+        success: true,
+
+        user: {
+
+            id: req.user._id,
+
+            name: req.user.name,
+
+            email: req.user.email,
+
+            phone: req.user.phone,
+
+            role: req.user.role,
+
+            avatar: req.user.avatar
+
+        }
+
+    });
+
 };
